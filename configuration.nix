@@ -31,19 +31,13 @@
   environment.systemPackages = with pkgs; [
     curl
     git
-    vim
-    rxvt_unicode
-    wget
-    zsh
+    termite
+    (neovim.override { vimAlias = true; })
+    zsh-prezto
   ];
 
   nixpkgs.config = {
     allowUnfree = true;
-
-    chromium = {
-      enablePepperFlash = true;
-      enablePepperPDF = true;
-    };
   };
 
   programs = {
@@ -53,7 +47,7 @@
 
   # NOTE: changes to this take effect on login.
   environment.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = "nvim";
     NIXPKGS_ALLOW_UNFREE = "1";
     # Don't create .pyc files.
     PYTHONDONTWRITEBYTECODE = "1";

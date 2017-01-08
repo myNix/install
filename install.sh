@@ -47,4 +47,4 @@ nixos-generate-config --root $dest
 rm -rf $dest/etc/nixos/*
 cp *.nix $dest/etc/nixos/
 
-nixos-install
+nixos-install -I nixkgs=https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.zip:nixos

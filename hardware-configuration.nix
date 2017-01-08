@@ -39,9 +39,7 @@
      fsType = "ext4";
    };
 
-  swapDevices = [{
-    device = "dev/mapper/thaddius-swap";
-  }];
+  swapDevices = [];
 
   nix = {
     maxJobs = lib.mkDefault 12;
