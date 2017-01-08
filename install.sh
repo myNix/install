@@ -2,7 +2,7 @@
 
 set -e -x
 
-dest='/tmp/mnt'
+dest='/mnt'
 
 umount $dest | exit 0
 cryptsetup remove /dev/mapper/root | exit 0
@@ -40,4 +40,5 @@ mkdir -p $dest/boot
 mount $13 $dest/boot
 
 nixos-generate-config --root $dest
-rm -rf /mnt/etc/nixos/configuration.nix
+rm -rf $dest/etc/nixos/*
+cp *.nix $dest/etc/nixos
