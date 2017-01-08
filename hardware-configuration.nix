@@ -15,29 +15,35 @@
 
   fileSystems."/" =
     { mountPoint = "/";
-      device = "/dev/mapper/root";
+      device = "/dev/mapper/thaddius-root";
       fsType = "ext4";
-      options = "noatime,nodiratime,discard";
+      options = [ "noatime,nodiratime,discard" ];
     };
 
   boot.initrd.luks.devices = [{
       name = "root";
-      device = "/dev/mapper/thaddius-lvroot";
+      device = "/dev/disk/by-path/pci-0000:00:1f.5-ata-1-part4";
       allowDiscards = true;
+      preLVM = true;
   }];
 
   fileSystems."/boot" =
     { mountPoint = "/boot";
-      device = "/dev/sdb3";
+      device = "/dev/disk/by-path/pci-0000:00:1f.5-ata-1-part2";
       fsType = "vfat";
     };
 
-  swapDevices = [ ];
+  fileSystems."/home" =
+   { mountPoint = "/home";
+     device = "/dev/mapper/thaddius-home";
+     fsType = "ext4";
+   };
+
+  swapDevices = [{
+    device = "dev/mapper/thaddius-swap";
+  }];
 
   nix = {
-    extraOptions = ''
-      build-cores = 6;
-    '';
     maxJobs = lib.mkDefault 12;
   };
 }

@@ -18,7 +18,7 @@
   networking.hostName = "thaddius"; # Define your hostname.
   # hostId needed for zsh
   # cksum /etc/machine-id | while read c rest; do printf "%x" $c; done
-  networking.hostId = "47258f0";
+  # networking.hostId = "47258f0";
 
   # Select internationalisation properties.
   i18n = {
@@ -31,7 +31,7 @@
   environment.systemPackages = with pkgs; [
     curl
     git
-    nvim
+    vim
     rxvt_unicode
     wget
     zsh
@@ -53,7 +53,7 @@
 
   # NOTE: changes to this take effect on login.
   environment.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "vim";
     NIXPKGS_ALLOW_UNFREE = "1";
     # Don't create .pyc files.
     PYTHONDONTWRITEBYTECODE = "1";
