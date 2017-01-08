@@ -11,10 +11,14 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
+  boot.kernelPackages = pkgs.linuxPackages_4_8;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "thaddius"; # Define your hostname.
+  # hostId needed for zsh
+  # cksum /etc/machine-id | while read c rest; do printf "%x" $c; done
+  networking.hostId = "47258f0";
 
   # Select internationalisation properties.
   i18n = {
@@ -31,7 +35,7 @@
     rxvt_unicode
     wget
     zsh
-  ]);
+  ];
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -49,7 +53,7 @@
 
   # NOTE: changes to this take effect on login.
   environment.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = "nvim";
     NIXPKGS_ALLOW_UNFREE = "1";
     # Don't create .pyc files.
     PYTHONDONTWRITEBYTECODE = "1";
@@ -85,7 +89,7 @@
     xkbOptions = "eurosign:e, caps:none";
 
     desktopManager = {
-      xterm.enable = true;
+      xterm.enable = false;
       default = "none";
     };
     windowManager = {
@@ -110,6 +114,7 @@
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "16.09";
-
+  system.stateVersion = "unstable";
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-unstable;
 }

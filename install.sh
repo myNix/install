@@ -4,12 +4,13 @@ set -e -x
 
 dest='/mnt'
 
+umount $dest/boot | exit 0
 umount $dest | exit 0
 cryptsetup remove /dev/mapper/root | exit 0
-lvremove /dev/mapper/$2-lvroot | exit 0
-lvremove /dev/mapper/$2-swap | exit 0
-lvremove /dev/mapper/$2-tmp | exit 0
-lvremove /dev/mapper/$2-home | exit 0
+lvremove -f /dev/mapper/$2-lvroot | exit 0
+lvremove -f /dev/mapper/$2-swap | exit 0
+lvremove -f /dev/mapper/$2-tmp | exit 0
+lvremove -f /dev/mapper/$2-home | exit 0
 vgremove -f $2 | exit 0
 pvremove -ff $14 | exit 0
 
@@ -41,4 +42,6 @@ mount $13 $dest/boot
 
 nixos-generate-config --root $dest
 rm -rf $dest/etc/nixos/*
-cp *.nix $dest/etc/nixos
+cp *.nix $dest/etc/nixos/
+
+nixos-install
