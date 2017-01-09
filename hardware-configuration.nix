@@ -8,38 +8,47 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ata_piix" "usbhid" "sd_mod" ];
-  boot.initrd.luks.cryptoModules = ["aes" "sha256" "sha1" "cbc"];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot = {
 
-  fileSystems."/" =
-    { mountPoint = "/";
+    initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ata_piix" "usbhid" "sd_mod" ];
+    initrd.luks.cryptoModules = ["aes" "sha256" "sha1" "cbc"];
+
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+
+    initrd.luks.devices = [{
+      name = "root";
+      device = "/dev/disk/by-path/pci-0000:00:1f.5-ata-1-part4";
+      # For ssd
+      allowDiscards = true;
+      preLVM = true;
+    }];
+
+  };
+
+  fileSystems = {
+    "/" = {
+      mountPoint = "/";
       device = "/dev/mapper/thaddius-root";
       fsType = "ext4";
       options = [ "noatime,nodiratime,discard" ];
     };
 
-  boot.initrd.luks.devices = [{
-      name = "root";
-      device = "/dev/disk/by-path/pci-0000:00:1f.5-ata-1-part4";
-      allowDiscards = true;
-      preLVM = true;
-  }];
-
-  fileSystems."/boot" =
-    { mountPoint = "/boot";
+    "/boot" = {
+      mountPoint = "/boot";
       device = "/dev/disk/by-path/pci-0000:00:1f.5-ata-1-part2";
       fsType = "vfat";
     };
 
-  fileSystems."/home" =
-   { mountPoint = "/home";
-     device = "/dev/mapper/thaddius-home";
-     fsType = "ext4";
-   };
+    "/home" = {
+      mountPoint = "/home";
+      device = "/dev/mapper/thaddius-home";
+      fsType = "ext4";
+    };
 
-  swapDevices = [];
+  };
+
+  swapDevices = [ ];
 
   nix = {
     maxJobs = lib.mkDefault 12;
