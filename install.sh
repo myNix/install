@@ -4,6 +4,7 @@ set -e -x
 
 dest='/mnt'
 
+umount $dest/home | exit 0
 umount $dest/boot | exit 0
 umount $dest | exit 0
 lvremove -f /dev/mapper/$2-lvroot | exit 0
@@ -47,4 +48,6 @@ nixos-generate-config --root $dest
 rm -rf $dest/etc/nixos/*
 cp *.nix $dest/etc/nixos/
 
-nixos-install -I nixkgs=https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.zip:nixos
+cd $dest/etc/nixos
+git clone https://github.com/NixOS/nixpkgs-channels.git
+nixos-install -I nixkgs=/mnt/etc/nixos/nixpkgs-channels/
