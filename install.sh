@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-set -e -x
+set -e -x -u
 
 dest='/mnt'
+# TODO: change args variables
+device=$1
+group=$2
 
+# teardown (should be in different file)
 umount $dest/home | exit 0
 umount $dest/boot | exit 0
 umount $dest | exit 0
@@ -15,6 +19,8 @@ vgremove -f $2 | exit 0
 pvremove -ff $14 | exit 0
 cryptsetup remove /dev/mapper/base | exit 0
 
+# install
+sgdisk -Z $1
 sgdisk -og $1
 partprobe $1
 sgdisk -n 1:2048:4095 -c 1:"BIOS Boot Partition" -t 1:ef02 $1
